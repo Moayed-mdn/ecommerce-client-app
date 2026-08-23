@@ -22,8 +22,15 @@
           class="rounded-2xl p-5 border"
           :style="cardStyle"
         >
-          <p class="text-sm font-bold" :style="{ color: colorScheme.color }">{{ item.title }}</p>
-          <p class="mt-1 text-sm leading-relaxed" :style="{ color: colorScheme.color, opacity: 0.8 }">{{ item.body }}</p>
+          <img
+            v-if="item.icon"
+            :src="item.icon"
+            :alt="item.title || ''"
+            loading="lazy"
+            class="mb-3 h-10 w-10 object-contain"
+          >
+          <p v-if="item.title" class="text-sm font-bold" :style="{ color: colorScheme.color }">{{ item.title }}</p>
+          <p v-if="item.body" class="mt-1 text-sm leading-relaxed" :style="{ color: colorScheme.color, opacity: 0.8 }">{{ item.body }}</p>
         </li>
       </ul>
 
@@ -47,11 +54,21 @@
   </section>
 </template>
 
+<!--
+  Data shapes this component supports for `data.items`:
+    1. data.items = [{ icon, title, body }, ...]                (flat array, preferred shape)
+    2. data.content = [{ icon, title, body }, ...]               (array stored under `content`)
+    3. data.content = { items: [{ icon, title, body }, ...] }    (nested shape some CMS records use)
+  Items may have icon-only, title-only, body-only, or any combination of the three.
+-->
+
 <script setup lang="ts">
 import type { RuntimeSectionComponentProps } from '../types'
 import { applyColorScheme } from '../utils/colorScheme'
+import { useMediaUrl } from '~/composables/useMediaUrl'
 
 const props = defineProps<RuntimeSectionComponentProps>()
+const { resolveMediaUrl } = useMediaUrl()
 
 // Color scheme support
 const colorScheme = computed(() => {
@@ -73,24 +90,38 @@ const cardStyle = computed(() => ({
 
 type CardItem = { title: string; body: string; icon?: string }
 
-const rawItems = computed(() => {
-  return Array.isArray(props.data.items)
-    ? props.data.items
-    : Array.isArray(props.data.content)
-      ? props.data.content
-      : []
+const rawItems = computed<unknown[]>(() => {
+  const data = props.data
+
+  // Shape 1: data.items = [...]
+  if (Array.isArray(data.items)) return data.items
+
+  // Shape 2: data.content = [...]
+  if (Array.isArray(data.content)) return data.content
+
+  // Shape 3: data.content = { items: [...] }  (nested shape some CMS records use)
+  const content = data.content
+  if (content && typeof content === 'object' && !Array.isArray(content)) {
+    const nestedItems = (content as Record<string, unknown>).items
+    if (Array.isArray(nestedItems)) return nestedItems
+  }
+
+  return []
 })
 
-// Rich card items: objects with at least a title and body
+// Rich card items: objects with an icon, a title, and/or a body — any combination.
+// Items with only an icon (no title/body) are still valid cards, e.g. a logo grid.
 const cardItems = computed<CardItem[]>(() => {
   return rawItems.value
     .filter((item): item is Record<string, unknown> =>
       item !== null && typeof item === 'object' && !Array.isArray(item) &&
-      'title' in item && 'body' in item)
+      (typeof (item as Record<string, unknown>).icon === 'string' ||
+       typeof (item as Record<string, unknown>).title === 'string' ||
+       typeof (item as Record<string, unknown>).body === 'string'))
     .map((item) => ({
-      icon:  typeof item.icon  === 'string' ? item.icon  : undefined,
-      title: typeof item.title === 'string' ? item.title : String(item.title ?? ''),
-      body:  typeof item.body  === 'string' ? item.body  : String(item.body  ?? ''),
+      icon:  typeof item.icon  === 'string' && item.icon ? resolveMediaUrl(item.icon) : undefined,
+      title: typeof item.title === 'string' ? item.title : '',
+      body:  typeof item.body  === 'string' ? item.body  : '',
     }))
 })
 
@@ -111,5 +142,18 @@ const featureItems = computed<string[]>(() => {
 
 const title    = computed(() => typeof props.data.title    === 'string' ? props.data.title    : '')
 const subtitle = computed(() => typeof props.data.subtitle === 'string' ? props.data.subtitle : '')
-const content  = computed(() => props.data.content ?? null)
+
+// Last-resort debug fallback: only reached when there are no card items and no
+// string items. Stringify objects/arrays so this never prints "[object Object]".
+const content = computed<string | null>(() => {
+  const raw = props.data.content
+  if (raw === null || raw === undefined || raw === '') return null
+  if (typeof raw === 'string') return raw
+  if (typeof raw === 'number' || typeof raw === 'boolean') return String(raw)
+  try {
+    return JSON.stringify(raw, null, 2)
+  } catch {
+    return null
+  }
+})
 </script>

@@ -146,7 +146,7 @@ export default defineNuxtConfig({
 
   i18n: {
     defaultLocale: 'en',
-    strategy: 'prefix',
+    strategy: 'prefix_except_default',
     baseUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000',
     detectBrowserLanguage: {
       useCookie: true,

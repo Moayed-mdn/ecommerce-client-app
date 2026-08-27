@@ -39,8 +39,9 @@
 <script setup lang="ts">
 import type { RuntimeSectionComponentProps } from '../types'
 import { applyColorScheme } from '../utils/colorScheme'
+import { useCmsLink } from '~/composables/useCmsLink'
 
-const localePath = useLocalePath()
+const { resolveHref } = useCmsLink()
 const { locale } = useI18n()
 
 type CategoryCard = {
@@ -107,14 +108,7 @@ const categories = computed<CategoryCard[]>(() => {
     .map((item) => {
       const name = getLocalizedValue(item.name) || 'Category'
       const pathValue = getLocalizedValue(item.path) || '#'
-      
-      // Apply localePath if the path doesn't already have a locale prefix
-      const finalPath = pathValue !== '#' && 
-                       pathValue.startsWith('/') && 
-                       !pathValue.startsWith('/en/') && 
-                       !pathValue.startsWith('/ar/')
-        ? localePath(pathValue)
-        : pathValue
+      const finalPath = resolveHref(pathValue)
       
       return {
         id: (item.id as string | number) ?? item.slug ?? name,

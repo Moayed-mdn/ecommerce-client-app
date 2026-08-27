@@ -32,8 +32,9 @@
 import type { RuntimeSectionComponentProps } from '../types'
 import { getContrastingTextColor } from '../utils/colorContrast'
 import { applyColorScheme, resolveColorSchemeKey } from '../utils/colorScheme'
+import { useCmsLink } from '~/composables/useCmsLink'
 
-const localePath = useLocalePath()
+const { resolveHref } = useCmsLink()
 
 type HeroBannerItem = {
   headline?: string
@@ -241,12 +242,7 @@ const resolvedCtaUrl = computed(() => {
 
   if (!raw) return ''
 
-  // Only localize internal paths that aren't already locale-prefixed
-  if (raw.startsWith('/') && !raw.startsWith('/en/') && !raw.startsWith('/ar/')) {
-    return localePath(raw)
-  }
-
-  return raw
+  return resolveHref(raw)
 })
 
 const hasContent = computed(() =>

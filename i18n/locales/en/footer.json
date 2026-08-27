@@ -53,5 +53,6 @@
     "help_center": "Help Center",
     "terms_of_service": "Terms of Service",
     "privacy_policy": "Privacy & Policy"
-  }
+  },
+  "copyright_default": "© {year} All rights reserved."
 }

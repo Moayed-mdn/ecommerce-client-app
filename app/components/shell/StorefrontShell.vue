@@ -34,7 +34,7 @@ import {
   provideStorefrontShell,
   type StorefrontShellVariant,
 } from '~/composables/useStorefrontShell'
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 const props = withDefaults(defineProps<{
   variant?: StorefrontShellVariant
@@ -108,7 +108,8 @@ const copyrightVisible = computed(() => {
 const copyrightText = computed(() => {
   const year = new Date().getFullYear()
   const raw = resolveLocalizedString(copyrightSettings.value.text ?? copyrightSettings.value.copyright_text)
-  return raw.replace(/\{year\}/g, String(year))
+  const template = raw || t('footer.copyright_default')
+  return template.replace(/\{year\}/g, String(year))
 })
 const copyrightBgColor = computed(() => String(copyrightSettings.value.background_color ?? copyrightSettings.value.bg_color ?? 'transparent'))
 const copyrightTextColor = computed(() => String(copyrightSettings.value.text_color ?? '#6b7280'))

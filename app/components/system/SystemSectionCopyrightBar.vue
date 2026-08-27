@@ -16,7 +16,7 @@ const props = defineProps<{
   section: RuntimeTemplateSectionDetail
 }>()
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 const merged = computed(() => ({
   ...props.section.settings,
@@ -42,7 +42,8 @@ const resolveLocalizedString = (value: unknown): string => {
 const text = computed(() => {
   const year = new Date().getFullYear()
   const raw = resolveLocalizedString(merged.value.text ?? merged.value.copyright_text)
-  return raw.replace(/\{year\}/g, String(year))
+  const template = raw || t('footer.copyright_default')
+  return template.replace(/\{year\}/g, String(year))
 })
 const bgColor = computed(() => String(merged.value.background_color ?? merged.value.bg_color ?? 'transparent'))
 const textColor = computed(() => String(merged.value.text_color ?? '#6b7280'))

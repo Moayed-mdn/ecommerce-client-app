@@ -1,11 +1,12 @@
 import { EXTERNAL_API_ROUTES } from '~~/shared/utils/routes'
 import { buildExternalApiUrl } from '../../../utils/api'
+import { getEventLocaleWithReferer } from '../../../utils/locale'
 
 export default defineEventHandler(async (event) => {
   const target = buildExternalApiUrl(event, EXTERNAL_API_ROUTES.auth.googleRedirect)
   const requestUrl = getRequestURL(event)
   const host = requestUrl.host.split(':')[0] || 'localhost'
-  const locale = String(getCookie(event, 'i18n_redirected') || getHeader(event, 'accept-language') || 'en')
+  const locale = getEventLocaleWithReferer(event)
   const tenantId = String(event.context.tenantId || '')
 
   const origin = getHeader(event, 'origin')

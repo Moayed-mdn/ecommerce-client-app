@@ -5,6 +5,7 @@ import {
   normalizeProxySetCookie,
   requestWithForwardedHost,
 } from '../../../utils/api'
+import { getEventLocale } from '../../../utils/locale'
 import { STOREFRONT_RUNTIME_CONTRACT_VERSION } from '../../../../src/core/runtime/contracts/constants'
 
 export default defineEventHandler(async (event) => {
@@ -12,7 +13,12 @@ export default defineEventHandler(async (event) => {
   const targetBase = configuredTarget
   const requestUrl = getRequestURL(event)
   const host = getNormalizedRequestHost(event)
-  const rawLocale = String(getCookie(event, 'i18n_redirected') || getHeader(event, 'accept-language') || 'en')
+  // NOTE: Referer here is the OAuth provider's domain (accounts.google.com), not a
+  // storefront page, so it can't tell us which locale the user started from. This
+  // endpoint would need the original locale round-tripped through the OAuth `state`
+  // param for a fully correct answer; Accept-Language is the best available signal
+  // short of that, and is at least no longer overridden by the stale cookie.
+  const rawLocale = getEventLocale(event)
   const locale = rawLocale.split('-')[0].split(',')[0].trim().toLowerCase()
   const tenantId = String(event.context.tenantId || '')
 

@@ -3,6 +3,7 @@ import {
   isStorefrontRuntimeEnabledForTenant,
   normalizeStorefrontRuntimeRolloutConfig,
 } from '../../src/core/runtime/rollout/isStorefrontRuntimeEnabled'
+import { getEventLocale } from '../utils/locale'
 
 const legacyPassthroughPrefixes = [
   '/login',
@@ -16,8 +17,16 @@ const legacyPassthroughPrefixes = [
   '/storage',
 ]
 
+// Keep in sync with nuxt.config.ts i18n.locales. Strategy is 'prefix_except_default',
+// so only non-default locales ('ar') actually appear as a URL prefix, but we strip
+// any of them defensively in case that ever changes.
+const localePrefixPattern = /^\/(en|ar)(?=\/|$)/
+
+const stripLocalePrefix = (path: string): string => path.replace(localePrefixPattern, '') || '/'
+
 const isLegacyPassthroughPath = (path: string): boolean => {
-  return legacyPassthroughPrefixes.some(prefix => path === prefix || path.startsWith(`${prefix}/`))
+  const unprefixed = stripLocalePrefix(path)
+  return legacyPassthroughPrefixes.some(prefix => unprefixed === prefix || unprefixed.startsWith(`${prefix}/`))
 }
 
 export default defineEventHandler(async (event) => {
@@ -43,7 +52,7 @@ export default defineEventHandler(async (event) => {
   
   // 5. Setup initial storefront context for SSR
   // This will be picked up by useStorefrontContext on the client
-  const locale = String(getCookie(event, 'i18n_redirected') || getHeader(event, 'x-storefront-locale') || 'en')
+  const locale = getEventLocale(event)
   const query = getQuery(event)
   const preview = query.preview === 'true' || query.preview === '1'
   const previewToken = typeof query.previewToken === 'string'

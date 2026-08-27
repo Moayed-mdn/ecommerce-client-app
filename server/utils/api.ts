@@ -3,6 +3,7 @@ import { request as httpRequest } from 'node:http'
 import { request as httpsRequest } from 'node:https'
 import type { H3Event } from 'h3'
 import { STOREFRONT_RUNTIME_CONTRACT_VERSION } from '../../src/core/runtime/contracts/constants'
+import { getEventLocale } from './locale'
 
 export const getNormalizedRequestHost = (event: H3Event) => {
   const hostHeader = String(getHeader(event, 'host') || getHeader(event, 'x-forwarded-host') || 'localhost')
@@ -160,7 +161,7 @@ export const requestWithForwardedHost = async (
 export const useServerApi = (event: H3Event) => {
   const config = useRuntimeConfig(event)
   const apiBase = String(config.apiBase || '').replace(/\/+$/, '')
-  const locale = getCookie(event, 'i18n_redirected') || getHeader(event, 'accept-language') || 'en'
+  const locale = getEventLocale(event)
   const tenantId = event.context.tenantId || ''
   const tenantSlug = event.context.tenantSlug || ''
   const normalizedHost = getNormalizedRequestHost(event)
@@ -292,7 +293,7 @@ export const proxySessionAuthRequest = async (event: H3Event, path: string, opti
   const config = useRuntimeConfig(event)
   const apiBase = String(config.apiBase || '').replace(/\/+$/, '')
   const apiRoot = buildApiRoot(apiBase)
-  const locale = String(getCookie(event, 'i18n_redirected') || getHeader(event, 'accept-language') || 'en')
+  const locale = getEventLocale(event)
   const tenantId = String(event.context.tenantId || '')
   const tenantSlug = String(event.context.tenantSlug || '')
   const normalizedHost = getNormalizedRequestHost(event)
@@ -427,9 +428,7 @@ export const proxySessionAuthRequest = async (event: H3Event, path: string, opti
 
 export const useRuntimeServerApi = (event: H3Event) => {
   const config = useRuntimeConfig(event)
-  const localeHeader = getHeader(event, 'x-storefront-locale')
-  const localeCookie = getCookie(event, 'i18n_redirected')
-  const locale = String(localeHeader || localeCookie || 'en')
+  const locale = getEventLocale(event)
   const requestId = String(getHeader(event, 'x-request-id') || crypto.randomUUID())
   const previewToken = getHeader(event, 'x-preview-token')
   const hostHeader = String(getHeader(event, 'host') || getHeader(event, 'x-forwarded-host') || 'localhost')

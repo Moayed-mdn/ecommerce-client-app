@@ -1,6 +1,7 @@
 import { computed, watch, type Ref } from 'vue'
 import { useStorefrontContext } from '~~/src/core/tenant/composables'
 import type { RuntimeTemplateSectionDetail, RuntimeNavigationItem, RuntimeSystemTemplate } from '~~/src/core/runtime/contracts/types'
+import { STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST } from '~~/src/core/runtime/contracts/constants'
 
 type NavData = { header: RuntimeNavigationItem[]; footer: RuntimeNavigationItem[] } | null
 
@@ -26,7 +27,7 @@ const CHECKOUT_MAP: Record<string, string> = {
 function detectPageType(route: ReturnType<typeof useRoute>): string | null {
   const path = route.path.replace(/\/$/, '')
   const segments = path.split('/').filter(Boolean)
-  const localePrefix = new Set(['en', 'ar'])
+  const localePrefix = new Set(STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST)
   const relevant = segments.filter(s => !localePrefix.has(s))
 
   if (relevant.includes('checkout')) {

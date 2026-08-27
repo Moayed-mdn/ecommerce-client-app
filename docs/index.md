@@ -87,6 +87,7 @@ It links the current owner documents, records what has already been created, and
 | `docs/reference/adr-002-api-base-runtime-boundary.md` | Proposed separation between server and public API base config |
 | `docs/reference/adr-003-google-callback-owner.md` | Proposed single-owner rule for Google callback handling |
 | `docs/reference/adr-007-storefront-runtime-contract-first-boundary.md` | Contract-first boundary for the storefront runtime migration |
+| `docs/reference/adr-008-critical-patterns-audit-2026-08.md` | **[NEW]** Mandatory correctness patterns from August 2026 audit: locale detection, CMS links, composable context safety |
 | `docs/templates/adr-template.md` | Standard ADR template |
 | `docs/templates/page-doc-template.md` | Standard page documentation template |
 | `docs/templates/feature-doc-template.md` | Standard feature documentation template |

@@ -1,6 +1,8 @@
 export const STOREFRONT_RUNTIME_CONTRACT_VERSION = '2026-06-26' as const
 
 export const STOREFRONT_RUNTIME_SUPPORTED_LOCALES = ['en', 'ar'] as const
+// Widened companion for .includes()/.has() against plain strings (avoids TS2345)
+export const STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST: readonly string[] = STOREFRONT_RUNTIME_SUPPORTED_LOCALES
 
 export const STOREFRONT_RUNTIME_PAGE_TYPES = [
   'home',

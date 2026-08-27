@@ -74,6 +74,16 @@
   </section>
 </template>
 
+<!--
+  Data shape: data.content = { plans: [{ name, price, description, features, ... }, ...] }
+  
+  This nested shape is enforced by the admin panel (PricingSectionContent.tsx), which always
+  POSTs content.plans (not a flat array). Backend validation passes it through as-is.
+  No backward compatibility needed - admin has always used this shape.
+  
+  Verified: laratenant-commerce section-editors, laratenant-backend StorefrontRuntimeService, Aug 2026 audit
+-->
+
 <script setup lang="ts">
 import type { RuntimeSectionComponentProps } from '../types'
 import { applyColorScheme } from '../utils/colorScheme'

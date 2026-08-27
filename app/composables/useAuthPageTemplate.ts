@@ -3,6 +3,7 @@ import { useStorefrontApi } from '~~/src/core/api/client'
 import { useStorefrontContext } from '~~/src/core/tenant/composables'
 import { API_ROUTES } from '~~/shared/utils/routes'
 import { createCacheKey } from '~~/src/core/cache/createCacheKey'
+import { STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST } from '~~/src/core/runtime/contracts/constants'
 
 const AUTH_PAGE_TYPES = ['login', 'register', 'forgot-password', 'reset-password', 'verify-email'] as const
 
@@ -15,8 +16,7 @@ export const useAuthPageTemplate = () => {
   const pageType = computed(() => {
     const path = route.path.replace(/\/$/, '')
     const segments = path.split('/').filter(Boolean)
-    const localePrefix = ['en', 'ar']
-    const relevantSegments = segments.filter(s => !localePrefix.includes(s))
+    const relevantSegments = segments.filter(s => !STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST.includes(s))
     const type = relevantSegments[relevantSegments.length - 1] ?? 'login'
     if ((AUTH_PAGE_TYPES as readonly string[]).includes(type)) {
       return type

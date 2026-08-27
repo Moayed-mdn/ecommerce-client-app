@@ -7,6 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "check:locales": "node scripts/check-hardcoded-locales.mjs",
     "runtime:contracts:check": "node scripts/check-runtime-contracts.mjs",
     "runtime:verify:phase6": "node scripts/verify-runtime-phase6.mjs",
     "runtime:verify:phase7": "node scripts/verify-runtime-phase7-rollout.mjs",

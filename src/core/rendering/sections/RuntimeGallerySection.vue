@@ -48,6 +48,16 @@
   </section>
 </template>
 
+<!--
+  Data shape: data.content = { members: [{ name, role, bio, image }, ...] }
+  
+  This nested shape is enforced by the admin panel (GallerySectionContent.tsx), which always
+  POSTs content.members (not a flat array). Backend validation passes it through as-is.
+  No backward compatibility needed - admin has always used this shape.
+  
+  Verified: laratenant-commerce section-editors, laratenant-backend StorefrontRuntimeService, Aug 2026 audit
+-->
+
 <script setup lang="ts">
 import type { RuntimeSectionComponentProps } from '../types'
 import { applyColorScheme } from '../utils/colorScheme'

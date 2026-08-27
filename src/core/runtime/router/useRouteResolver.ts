@@ -3,6 +3,7 @@ import type { RuntimeResolvedRoute } from './types'
 import { useStorefrontApi } from '../../api/client'
 import { API_ROUTES } from '../../../../shared/utils/routes'
 import { useStorefrontContext } from '../../tenant/composables'
+import { STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST } from '../contracts/constants'
 
 export const useRouteResolver = () => {
   const context = useStorefrontContext()
@@ -15,7 +16,7 @@ export const useRouteResolver = () => {
     // Extract locale from path if it starts with a locale prefix
     let requestLocale = context.value.locale
     const pathParts = cleanPath.split('/').filter(Boolean)
-    if (pathParts.length > 0 && ['en', 'ar'].includes(pathParts[0])) {
+    if (pathParts.length > 0 && STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST.includes(pathParts[0])) {
       requestLocale = pathParts[0] as 'en' | 'ar'
     }
 

@@ -118,20 +118,41 @@ export const createContextCacheKey = (
 /**
  * Composable wrapper for easy cache key generation
  * 
+ * CRITICAL: Resolves useStorefrontContext() and useNuxtApp().$i18n once,
+ * synchronously, at the time useCacheKey() is called (always from a valid
+ * component/composable setup scope). getCacheKey() only reads .value off these
+ * already-captured references later, which is safe even when invoked from
+ * inside a useAsyncData reactive key function (a computed()) or after an await.
+ * 
+ * DO NOT move the composable calls inside getCacheKey() — that would break when
+ * useAsyncData re-evaluates the key after a locale switch or a manual refresh(),
+ * at which point there may be no active component instance, causing:
+ * "Must be called at the top of a setup function."
+ * 
+ * See src/core/api/headers.ts for the reference pattern.
+ * 
  * @example
  * const { getCacheKey } = useCacheKey()
- * const key = getCacheKey({ resource: 'product', identifier: slug })
+ * useAsyncData(
+ *   () => getCacheKey({ resource: 'product', identifier: slug }),
+ *   handler,
+ *   { watch: [slug] }
+ * )
  */
 export const useCacheKey = () => {
-  // Lazy evaluation - only call composables when getCacheKey is called
+  // Resolve composables ONCE, synchronously, when useCacheKey() is called
+  // (always from a valid component/composable setup scope).
+  const context = useStorefrontContext()
+  const { $i18n: i18n } = useNuxtApp()
+
+  // getCacheKey is invoked later (from useAsyncData's reactive key, possibly
+  // after an await or from a watcher), so it ONLY reads .value off the
+  // already-captured refs — never calls a composable directly.
   const getCacheKey = (
     options: Omit<CacheKeyOptions, 'locale' | 'tenantSlug'>
   ): string => {
-    const context = useStorefrontContext()
-    const { locale } = useI18n()
-    
     return createCacheKey({
-      locale: locale.value,
+      locale: i18n.locale.value as string,
       tenantSlug: context.value.tenant?.slug,
       ...options,
     })

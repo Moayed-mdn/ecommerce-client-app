@@ -35,6 +35,7 @@ import type { PaginationMeta } from '~~/types/api';
 import type { ProductListFilters, ProductListResponse } from '~~/types/product'
 import type { ProductFilterConfig } from '~~/app/composables/useFilterConfig'
 import { transformProduct } from '~~/src/core/api/dto/storefront'
+import { STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST } from '~~/src/core/runtime/contracts/constants'
 
 const props = defineProps<{
   data: ProductListResponse | null
@@ -42,19 +43,29 @@ const props = defineProps<{
 
 const { filterConfig: systemFilterConfig, fetchFilterConfig } = useFilterConfig()
 const route = useRoute()
+const { locale } = useI18n()
 
 const filterConfig = ref<ProductFilterConfig | null>(null)
 
-onMounted(async () => {
+const resolveFilterConfigType = () => {
   const path = route.path.replace(/\/$/, '')
   const segments = path.split('/').filter(Boolean)
-  const localePrefix = new Set(['en', 'ar'])
+  const localePrefix = new Set(STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST)
   const relevant = segments.filter(s => !localePrefix.has(s))
   const last = relevant[relevant.length - 1]
-  const type = last === 'search' ? 'search' : 'shop'
-  await fetchFilterConfig(type)
+  return last === 'search' ? 'search' : 'shop'
+}
+
+const loadFilterConfig = async () => {
+  await fetchFilterConfig(resolveFilterConfigType())
   filterConfig.value = systemFilterConfig.value
-})
+}
+
+onMounted(loadFilterConfig)
+// The CMS-driven filter section (which filter widgets to show) is locale-scoped
+// like everything else in the runtime template; without this, switching language
+// left the sidebar showing whatever config was fetched on the very first mount.
+watch(locale, loadFilterConfig)
 
 const products = computed(() => {
   const rawProducts = props.data?.data

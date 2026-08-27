@@ -32,6 +32,7 @@ import { mapRuntimeSeoPayload, useRuntimeSeo } from '../../src/core/seo/useRunti
 import { useStorefrontContext } from '../../src/core/tenant/composables'
 import { provideTheme } from '../../src/core/theme/composables/useTheme'
 import UiLoadingSpinner from '../components/ui/LoadingSpinner.vue'
+import { STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST } from '../../src/core/runtime/contracts/constants'
 
 definePageMeta({
   layout: false,
@@ -44,7 +45,7 @@ const route = useRoute()
 // ✅ Extract locale from path - this is reactive and updates cache key
 const currentLocale = computed(() => {
   const pathParts = route.path.split('/').filter(Boolean)
-  if (pathParts.length > 0 && ['en', 'ar'].includes(pathParts[0])) {
+  if (pathParts.length > 0 && STOREFRONT_RUNTIME_SUPPORTED_LOCALES_LIST.includes(pathParts[0])) {
     return pathParts[0] as 'en' | 'ar'
   }
   return locale.value
@@ -155,59 +156,41 @@ const { data: runtimeData, pending, error } = await useAsyncData(
   () => runtimeDataKey.value,
   async () => {
     syncRuntimeContext()
-
     const resolved = await resolveRoute(route.path)
-
     if (resolved.status === 'not_found' || resolved.legacyPassthrough) {
       throw new StorefrontPageError('Page not found', 404, true)
     }
-
     const bundle = await fetchPayload(resolved)
-
     if (!bundle) {
-      throw new StorefrontPageError(
-        'The storefront runtime payload is unavailable.',
-        500
-      )
+      throw new StorefrontPageError('The storefront runtime payload is unavailable.', 500)
     }
-
-    // ✅ CRITICAL: Store theme in storefront context IMMEDIATELY after fetching
-    // This ensures it's available when components render during SSR
-    if (bundle.theme) {
-      storefrontContext.value.themePayload = bundle.theme
-    }
-
-    // ✅ Override global navigation with page template section navigation
-    // This allows per-page header/footer menu configuration via templates
-    if (bundle.page?.template?.sections) {
-      const sections = bundle.page.template.sections
-      const headerSection = Object.values(sections).find((s: RuntimeTemplateSection) => s.type === 'header')
-      const footerSection = Object.values(sections).find(
-        (s: RuntimeTemplateSection) => s.type === 'footer' || s.type === 'footer-minimal' || s.type === 'footer-legal',
-      )
-
-      const templateNav = {
-        header: (headerSection?.data?.navigation as RuntimeNavigationItem[]) ?? [],
-        footer: (footerSection?.data?.navigation as RuntimeNavigationItem[]) ?? [],
-      }
-
-      if (templateNav.header.length || templateNav.footer.length) {
-        storefrontContext.value.navigation = templateNav
-      }
-    }
-
-    return { resolved, bundle }
+    return { resolved, bundle } // no mutation of external state
   },
-  {
-    watch: [
-      runtimeDataKey,
-      () => route.path,
-      () => route.query.preview,
-      () => route.query.previewToken,
-      () => route.query.token,
-    ],
-  }
+  { watch: [runtimeDataKey, () => route.path, () => route.query.preview, () => route.query.previewToken, () => route.query.token] }
 )
+
+watch(runtimeData, (val) => {
+  if (!val) return
+  if (val.bundle.theme) {
+    storefrontContext.value.themePayload = val.bundle.theme
+  }
+  const sections = val.bundle.page?.template?.sections
+  if (sections) {
+    const headerSection = Object.values(sections).find((s: RuntimeTemplateSection) => s.type === 'header')
+    const footerSection = Object.values(sections).find((s: RuntimeTemplateSection) =>
+      s.type === 'footer' || s.type === 'footer-minimal' || s.type === 'footer-legal'
+    )
+    const templateNav = {
+      header: (headerSection?.data?.navigation as RuntimeNavigationItem[]) ?? [],
+      footer: (footerSection?.data?.navigation as RuntimeNavigationItem[]) ?? [],
+    }
+    if (templateNav.header.length || templateNav.footer.length) {
+      storefrontContext.value.navigation = templateNav
+    }
+  }
+}, { immediate: true })
+
+
 
 // We are synchronously in setup() here — createError is safe
 if (error.value) {

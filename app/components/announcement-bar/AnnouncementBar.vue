@@ -28,12 +28,12 @@
           class="underline underline-offset-2 hover:no-underline"
           :style="{ color: 'var(--announcement-text-color)' }"
         >
-          {{ shopNowText }}
+          {{ shopNowText }} 
         </a>
       </div>
 
       <div class="flex">
-        <div v-if="showLanguageSwitcher" class="mx-3">
+        <div v-if="languageSwitcher" class="mx-3">
           <TopbarLanguageSwitcher />
         </div>
       </div>

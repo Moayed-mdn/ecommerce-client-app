@@ -160,6 +160,7 @@
   const { clearCartAfterCheckout } = useCheckout()
   const { fetchOrder } = useOrders()
   const { t } = useI18n()
+  const checkoutStore = useCheckoutStore()
 
   useHead({
     title: t('checkout.success_title'),
@@ -221,6 +222,13 @@
       await loadOrderByNumber(orderNumber)
       status.value = 'success'
       clearCartAfterCheckout()
+      // Clear the checkout store now that this order is done. This is the
+      // one place guaranteed to run for every completed checkout, including
+      // Stripe redirect-based flows (e.g. 3D Secure) that land here directly
+      // without ever going back through checkout/index.vue's success handler.
+      // Without it, the next checkout attempt reuses this order's dead
+      // PaymentIntent/client_secret and Stripe rejects it as "terminal state".
+      checkoutStore.reset()
     } catch {
       // Retry once after 2 seconds in case the order/webhook state is still settling.
       await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -229,6 +237,7 @@
         await loadOrderByNumber(orderNumber)
         status.value = 'success'
         clearCartAfterCheckout()
+        checkoutStore.reset()
       } catch {
         status.value = 'error'
       }

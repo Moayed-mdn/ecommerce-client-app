@@ -61,6 +61,7 @@
   
   const routes = useStorefrontRoutes()
   const { t } = useI18n()
+  const checkoutStore = useCheckoutStore()
 
   definePageMeta({
     layout: 'system',
@@ -71,6 +72,13 @@
     meta: [
       { name: 'description', content: t('checkout.cancel_description') },
     ],
+  })
+
+  // Landing here means this PaymentIntent was abandoned/canceled. Clear it
+  // out so the next "Proceed to Checkout" starts clean instead of reusing a
+  // dead client_secret (same root cause fixed in success.vue).
+  onMounted(() => {
+    checkoutStore.reset()
   })
   </script>
   

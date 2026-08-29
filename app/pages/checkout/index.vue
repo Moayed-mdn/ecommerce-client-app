@@ -119,7 +119,15 @@ async function initialize() {
   try {
     loading.value = true
     error.value = null
-    
+
+    // Always start a checkout visit from a clean slate. Without this, a
+    // stale payment_intent_id / client_secret / current_step left over from
+    // a previous attempt (abandoned, failed, or already completed) stays in
+    // the store for the rest of the browser session and gets reused here,
+    // which is what caused "Proceed to Checkout" to jump straight to a dead
+    // Payment step (Stripe 400: PaymentIntent in a terminal state).
+    checkoutStore.reset()
+
     const data = await initiateEnhancedCheckout()
     checkoutStore.initializeSession(data)
     

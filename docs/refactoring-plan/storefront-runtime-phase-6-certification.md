@@ -73,4 +73,4 @@ Per the execution plan, these remain environment and operations responsibilities
 
 ## Next phase
 
-Controlled production rollout is documented in `docs/refactoring-plan/storefront-runtime-phase-7-rollout.md`.
+The rollout/kill-switch/pilot-tenant gating referenced in earlier planning docs was removed from the codebase — this project has never shipped to production, so runtime now applies unconditionally to every resolved tenant instead of being gated behind a rollout mode.

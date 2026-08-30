@@ -6,7 +6,7 @@ This document is the hub for the approved Phase 1 runtime contract package for t
 
 Code and artifact surfaces this package aligns with:
 
-- `docs/refactoring-plan/storefront-runtime-integration-execution-plan.md`
+- `docs/refactoring-plan/PLAN-SUMMARY.md`
 - `src/core/runtime/contracts/constants.ts`
 - `src/core/runtime/contracts/types.ts`
 - `src/core/runtime/contracts/schemas/**`

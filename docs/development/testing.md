@@ -37,17 +37,14 @@ Current verification is therefore manual plus build- and script-oriented for the
 | `npm run preview` | Local production-preview validation |
 | `npm run generate` | Optional static-generation validation |
 | `npm run runtime:contracts:check` | Validates the checked-in storefront runtime schemas and examples |
-| `npm run runtime:verify:phase6` | Verifies built SSR runtime pages, SEO markers, and runtime shell output against the Laravel runtime backend |
-| `npm run runtime:verify:phase7` | Verifies internal allowlist gating and kill-switch rollback behavior for the controlled rollout package |
+| `npm run runtime:smoke` | Verifies built SSR runtime pages, SEO markers, and runtime shell output against the Laravel runtime backend |
 
-## Storefront Runtime Rollout Verification
+## Storefront Runtime Smoke Verification
 
-The runtime migration now has repo-backed preflight verification for the rollout phase:
+The storefront runtime has repo-backed preflight verification:
 
-- `npm run runtime:verify:phase6` covers SSR runtime smoke for homepage, marketing, category, and product routes, plus canonical and JSON-LD markers.
-- `npm run runtime:verify:phase7` covers the Phase 7 rollout controls: internal-tenant gating, blocked-tenant rejection, and kill-switch rollback behavior.
-- The owner package for the operational rollout is `docs/refactoring-plan/storefront-runtime-phase-7-rollout.md`.
-- Local script success does not replace staging or production monitoring, pilot UAT, or sign-off requirements from the execution plan.
+- `npm run runtime:smoke` covers SSR runtime smoke for homepage, marketing, category, and product routes, plus canonical and JSON-LD markers.
+- Local script success does not replace manual verification of system routes (cart, checkout, orders, auth) or the browser smoke checks below.
 
 ## Required Current Verification Flow
 
@@ -119,14 +116,13 @@ Until a test framework is introduced, prefer targeted manual checks and `npm run
 - No general-purpose unit, integration, or end-to-end test harness is wired into `package.json`.
 - No CI automation is visible in the repo.
 - No component preview or visual regression tooling is present.
-- Phase 7 completion evidence still depends on environment execution, monitoring, and human approvals even though local rollout verification scripts exist.
 
-For the storefront runtime migration specifically:
+For the storefront runtime specifically:
 
-- Phase 1 contract schemas and examples are now validated locally by `npm run runtime:contracts:check`.
+- Contract schemas and examples are validated locally by `npm run runtime:contracts:check`.
 - CI execution of that command remains a later delivery task because no repository workflow is currently present.
-- Phase 3 verification should explicitly cover runtime SSR for homepage, marketing, category, and product pages, plus legacy-sensitive regressions for auth, cart, checkout, profile, and orders.
-- If the Laravel runtime backend is unavailable locally, treat `npm run build` plus legacy route SSR smoke checks as local verification and complete runtime SSR verification in an environment where Nitro can reach the backend runtime APIs.
+- Verification should explicitly cover runtime SSR for homepage, marketing, category, and product pages, plus regressions for the fixed system routes (auth, cart, checkout, profile, and orders).
+- If the Laravel runtime backend is unavailable locally, treat `npm run build` plus system-route SSR smoke checks as local verification and complete runtime SSR verification in an environment where Nitro can reach the backend runtime APIs.
 
 ## Change Rules
 

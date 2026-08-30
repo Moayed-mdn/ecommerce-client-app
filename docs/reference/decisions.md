@@ -21,6 +21,7 @@ Code surfaces this file aligns with:
 - Standalone ADRs now exist for request-helper consolidation, API-base runtime boundaries, and Google callback ownership.
 - Phase 5 audit-closure work and the review-required type decisions are complete for the validated `2026-05-27` cleanup batch.
 - Storefront runtime Phase 8 closeout is complete for repo scope (`2026-05-29`): unused migration composables removed, keep/retire log published, Phase 7 operator rollout deferred.
+- Storefront runtime rollout/kill-switch/pilot-tenant gating removed (`2026-08-28`): this project has never shipped to production, so the deferred Phase 7 rollout program described above will not run. `src/core/runtime/rollout/`, `src/core/runtime/feature-flags/`, `featureFlags` on `StorefrontContext`, `legacyPassthrough` in the route-resolution contract, and the related env vars were deleted. Runtime now applies unconditionally to every resolved tenant.
 - This file remains the index for implemented decisions, open ADRs, and any remaining backlog topics.
 - When a future decision needs formal rationale, create an ADR using `docs/templates/adr-template.md` and add it to this index.
 

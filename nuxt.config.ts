@@ -50,20 +50,6 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     apiBase: process.env.NUXT_API_BASE || process.env.NUXT_PUBLIC_API_BASE,
-    storefrontRuntimeRollout: {
-      mode: (process.env.NUXT_STOREFRONT_RUNTIME_ROLLOUT_MODE
-        || process.env.STOREFRONT_RUNTIME_ROLLOUT_MODE
-        || 'full') as 'off' | 'internal' | 'pilot' | 'full',
-      killSwitch: (process.env.NUXT_STOREFRONT_RUNTIME_KILL_SWITCH
-        || process.env.STOREFRONT_RUNTIME_KILL_SWITCH
-        || 'false') === 'true',
-      internalTenantKeys: process.env.NUXT_STOREFRONT_RUNTIME_INTERNAL_TENANT_KEYS
-        || process.env.STOREFRONT_RUNTIME_INTERNAL_TENANT_KEYS
-        || 'justshop-demo,demo.justshop.test',
-      pilotTenantKeys: process.env.NUXT_STOREFRONT_RUNTIME_PILOT_TENANT_KEYS
-        || process.env.STOREFRONT_RUNTIME_PILOT_TENANT_KEYS
-        || '',
-    },
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
       graphqlUrl: process.env.NUXT_PUBLIC_GRAPHQL_URL,
@@ -87,7 +73,6 @@ export default defineNuxtConfig({
     {
       path: fileURLToPath(new URL('./src/core/rendering', import.meta.url)),
       prefix: 'Runtime',
-      ignore: ['SectionBoundary.vue', 'SectionFallback.vue'],
     },
   ],
 

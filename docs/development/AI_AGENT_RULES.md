@@ -17,9 +17,8 @@ Use this file together with:
 ## Current Program Context
 
 - The repository documentation system is complete through the implementation-plan phases and now operates in maintenance mode.
-- The active storefront refactoring program is `docs/refactoring-plan/storefront-commerce-consolidation-execution-plan.md`.
-- The previous storefront runtime program remains important historical context in `docs/refactoring-plan/storefront-runtime-integration-execution-plan.md`.
-- When a request touches storefront routing, shell composition, auth, cart, search, tenant isolation, SSR continuity, or legacy retirement, inspect `docs/refactoring-plan/README.md` first to determine the active source-of-truth document.
+- The active storefront refactoring program is authoritatively described in `docs/refactoring-plan/PLAN-SUMMARY.md`. The prior `storefront-commerce-consolidation-execution-plan.md` and `storefront-runtime-integration-execution-plan.md` were removed on `2026-08-29` for encoding rollout/kill-switch/pilot-tenant complexity that doesn't apply to a project that has never shipped to production.
+- When a request touches storefront routing, shell composition, auth, cart, search, tenant isolation, or SSR continuity, inspect `docs/refactoring-plan/README.md` first to determine the active source-of-truth document.
 
 ## Repository Facts You Must Preserve
 
@@ -52,7 +51,7 @@ Important files to inspect before documenting related behavior:
 1. Inspect before editing.
 2. Read the live source files that own the behavior you are about to change or document.
 3. Treat `docs/implementation-plan.md` as the controlling roadmap for documentation sequencing unless the user explicitly changes scope.
-4. Treat `docs/refactoring-plan/storefront-commerce-consolidation-execution-plan.md` as the active storefront transformation roadmap when the task concerns storefront consolidation work.
+4. Treat `docs/refactoring-plan/PLAN-SUMMARY.md` as the active storefront transformation roadmap when the task concerns storefront consolidation work.
 5. Follow the documented phase order. Do not skip ahead when an upstream owner document is missing.
 6. Update documentation in the same change set whenever you modify:
    - environment variables

@@ -18,14 +18,18 @@
     "locale": "en",
     "layout": null,
     "redirectTo": "/about-us",
-    "redirectStatus": 301,
-    "legacyPassthrough": false
+    "redirectStatus": 301
   },
   "cache": {
     "key": "storefront_runtime:2026-05-28:tenant:justshop-demo:locale:en:artifact:route:path:/old-about",
     "artifact": "route",
     "ttlSeconds": 300,
-    "tags": ["tenant:justshop-demo", "locale:en", "artifact:route", "path:/old-about"],
+    "tags": [
+      "tenant:justshop-demo",
+      "locale:en",
+      "artifact:route",
+      "path:/old-about"
+    ],
     "bypassed": false
   }
 }

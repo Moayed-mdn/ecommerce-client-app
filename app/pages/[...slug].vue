@@ -61,13 +61,6 @@ if (process.client) {
   }, { immediate: true })
 }
 
-if (storefrontContext.value.featureFlags.storefront_runtime === false) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Page not found',
-  })
-}
-
 const nuxtApp = useNuxtApp()
 const { resolveRoute } = useRouteResolver()
 const { fetchPayload } = useStorefrontPayload()
@@ -135,14 +128,10 @@ const toRuntimePageError = (error: unknown) => {
   }
 
   const normalized = normalizeError(error)
-  const isRolloutDisabled =
-    normalized.code === 'runtime.rollout_disabled' ||
-    (normalized.statusCode === 403 &&
-      /storefront runtime is not enabled/i.test(normalized.message))
 
   return {
-    statusCode: isRolloutDisabled ? 404 : (normalized.statusCode || 500),
-    statusMessage: isRolloutDisabled ? 'Page not found' : normalized.message,
+    statusCode: normalized.statusCode || 500,
+    statusMessage: normalized.message,
     data: {
       ...normalized,
       // Preserve the runtime code so error.vue can render the right variant
@@ -157,7 +146,7 @@ const { data: runtimeData, pending, error } = await useAsyncData(
   async () => {
     syncRuntimeContext()
     const resolved = await resolveRoute(route.path)
-    if (resolved.status === 'not_found' || resolved.legacyPassthrough) {
+    if (resolved.status === 'not_found') {
       throw new StorefrontPageError('Page not found', 404, true)
     }
     const bundle = await fetchPayload(resolved)
@@ -243,7 +232,6 @@ const COMPONENT_FOR_TYPE: Record<string, string> = {
   category_grid: 'CategoryGridSection',
   product_grid: 'ProductGridSection',
   products: 'ProductGridSection',
-  search_filters: 'SystemSectionProductFilters',
   faq: 'FaqSection',
   gallery: 'GallerySection',
   video: 'VideoSection',

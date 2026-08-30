@@ -81,7 +81,6 @@ This specification defines the Phase 1 request and response contracts that the L
 | `data.layout` | `string` | `default`, `marketing`, `catalog`, `product` | Yes | `marketing` | `null` for redirect and not-found outcomes |
 | `data.redirectTo` | `string` | path or absolute URL | Yes | `/about-us` | Required only when `status = redirect` |
 | `data.redirectStatus` | `integer` | `301`, `302` | Yes | `301` | Required only when `status = redirect` |
-| `data.legacyPassthrough` | `boolean` | `true`, `false` | No | `false` | `true` only when route resolution chooses to defer to a legacy-sensitive flow |
 
 ## Page Payload Contract
 

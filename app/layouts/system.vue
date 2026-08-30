@@ -6,21 +6,20 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { defaultStorefrontShellConfig, provideStorefrontShell } from '~/composables/useStorefrontShell'
-import SystemSectionRenderer from '~/components/system/SystemSectionRenderer.vue'
 
+// useSystemPageTemplate() fetches the backend template for this system
+// page (cart/checkout/login/...) purely to read its chrome sections
+// (header, announcement_bar, footer, copyright_bar) and their settings.
+// The actual page body is NOT rendered from this template — every
+// system page (cart.vue, login.vue, etc.) hardcodes its own content in
+// its <template>. Do not add "content" section rendering here without
+// also wiring the page components to consume it.
 const {
   sectionOrder,
   sectionMap,
-  isEmpty,
 } = useSystemPageTemplate()
 
-const SHELL_SECTION_TYPES = new Set(['header', 'announcement_bar', 'footer', 'copyright_bar'])
 const CHROME_SECTION_TYPES = new Set(['header', 'announcement_bar', 'footer', 'copyright_bar'])
-
-const contentSectionOrder = computed(() =>
-  sectionOrder.value.filter(id => !SHELL_SECTION_TYPES.has(sectionMap.value[id]?.type ?? ''))
-)
 
 // Provide layout_order and chrome_sections for StorefrontShell
 const layoutOrder = computed(() => {
@@ -60,7 +59,4 @@ const chromeSections = computed(() => {
   return result
 })
 provide('chromeSections', chromeSections)
-
-const shellConfig = computed(() => defaultStorefrontShellConfig('full'))
-provideStorefrontShell(shellConfig)
 </script>

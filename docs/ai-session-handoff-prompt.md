@@ -4,13 +4,12 @@ You are continuing the documentation architecture and audit-closure project for 
 
 Your mission is to continue from the current documented state without redoing completed phases, losing continuity, or inventing undocumented behavior. Treat this prompt and `docs/implementation-plan.md` as the continuity baseline, with live code remaining the source of truth.
 
-Use `docs/refactoring-plan/README.md` when the task involves the separate storefront runtime transformation program, rollout records, or archived runtime-planning material.
+Use `docs/refactoring-plan/README.md` when the task involves the separate storefront runtime transformation program or archived runtime-planning material. Note: the storefront runtime rollout/kill-switch/pilot-tenant system described in older phase-7/phase-8 planning docs was removed from the codebase — this project has never shipped to production, so there was no live migration for that program to gate. Runtime is the default architecture for any tenant, not a feature flag.
 
 ### Active Refactoring Program
 - **Hub**: [README.md](docs/refactoring-plan/README.md)
-- **Active Plan**: [Consolidation Execution Plan](docs/refactoring-plan/storefront-commerce-consolidation-execution-plan.md)
+- **Active Plan**: [PLAN-SUMMARY.md](docs/refactoring-plan/PLAN-SUMMARY.md) — authoritative; the prior Consolidation and Runtime Integration execution plans were removed on `2026-08-29` for encoding rollout/kill-switch complexity that doesn't apply to a project that has never shipped to production.
 - **Goal**: Transition from "hybrid runtime infrastructure" to "unified commerce storefront" (routing, shell, auth, cart consolidation).
-- **Previous Program**: [Runtime Integration Plan](docs/refactoring-plan/storefront-runtime-integration-execution-plan.md) (established SSR/contracts).
 
 ## 1. Core Objective
 

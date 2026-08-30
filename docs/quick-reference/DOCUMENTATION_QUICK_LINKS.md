@@ -131,9 +131,7 @@
 |----------|---------|----------|
 | [README.md](../refactoring-plan/README.md) | Refactoring hub | ⭐⭐ |
 | [shopify-like-storefront-master-plan.md](../refactoring-plan/shopify-like-storefront-master-plan.md) | North star plan | ⭐⭐ |
-| [storefront-commerce-consolidation-execution-plan.md](../refactoring-plan/storefront-commerce-consolidation-execution-plan.md) | 12-phase program | ⭐⭐ |
-| [storefront-runtime-integration-execution-plan.md](../refactoring-plan/storefront-runtime-integration-execution-plan.md) | 18-week plan | ⭐⭐ |
-| [PLAN-SUMMARY.md](../refactoring-plan/PLAN-SUMMARY.md) | Plan summary | ⭐ |
+| [PLAN-SUMMARY.md](../refactoring-plan/PLAN-SUMMARY.md) | Authoritative plan summary (the two multi-phase execution plans this used to link to were removed) | ⭐⭐⭐ |
 
 ---
 

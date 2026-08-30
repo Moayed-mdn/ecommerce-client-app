@@ -19,7 +19,7 @@
     },
     "data": {
       "type": "object",
-      "required": ["status", "routeType", "pageId", "resourceType", "resourceId", "path", "locale", "layout", "redirectTo", "redirectStatus", "legacyPassthrough"],
+      "required": ["status", "routeType", "pageId", "resourceType", "resourceId", "path", "locale", "layout", "redirectTo", "redirectStatus"],
       "properties": {
         "status": { "type": "string", "enum": ["matched", "redirect", "not_found"] },
         "routeType": { "type": "string", "enum": ["home", "marketing_page", "category_page", "product_page", "redirect"] },
@@ -30,8 +30,7 @@
         "locale": { "type": "string", "enum": ["en", "ar"] },
         "layout": { "type": ["string", "null"], "enum": ["default", "marketing", "catalog", "product", null] },
         "redirectTo": { "type": ["string", "null"] },
-        "redirectStatus": { "type": ["integer", "null"], "enum": [301, 302, null] },
-        "legacyPassthrough": { "type": "boolean" }
+        "redirectStatus": { "type": ["integer", "null"], "enum": [301, 302, null] }
       },
       "additionalProperties": false
     },

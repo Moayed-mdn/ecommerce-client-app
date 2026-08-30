@@ -9,7 +9,6 @@ export const useStorefrontContext = () => {
     preview: false,
     previewToken: null,
     route: '',
-    featureFlags: {},
     requestId: '',
     navigation: null,
     themePayload: null,

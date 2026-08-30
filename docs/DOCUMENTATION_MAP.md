@@ -114,7 +114,7 @@ docs/
 │   ├── storefront-core-design.md
 │   │   └── Core storefront design
 │   ├── storefront-migration-strategy.md
-│   │   └── Migration strategy
+│   │   └── System routes vs storefront runtime routes (historical note: no longer a migration plan)
 │   ├── storefront-runtime-contracts.md
 │   │   └── Runtime contract hub
 │   ├── storefront-runtime-api-contract-specification-v1.md
@@ -147,7 +147,7 @@ docs/
 │   └── storefront-runtime-contract-test-matrix-v1.md
 │       └── Runtime contract testing
 │
-├── ⚙️ CONFIGURATION/ (7 files) ⭐⭐
+├── ⚙️ CONFIGURATION/ (6 files) ⭐⭐
 │   ├── overview.md ⭐⭐
 │   │   └── Configuration ownership
 │   ├── nuxt-config.md ⭐⭐⭐
@@ -158,10 +158,8 @@ docs/
 │   │   └── Env variable catalog
 │   ├── modules.md ⭐
 │   │   └── Nuxt module inventory
-│   ├── plugins.md ⭐⭐
-│   │   └── Plugin inventory and order
-│   └── feature-flags.md
-│       └── Feature flag governance
+│   └── plugins.md ⭐⭐
+│       └── Plugin inventory and order
 │
 ├── 🔧 OPERATIONS/ (13 files) ⭐⭐
 │   ├── build-and-release.md ⭐⭐
@@ -229,30 +227,17 @@ docs/
 │   ├── STOREFRONT_INTEGRATION_PLAN.md
 │   └── STOREFRONT_THEME_SYSTEM_PLAN.md
 │
-├── 🏗️ REFACTORING PLAN/ (25+ files)
+├── 🏗️ REFACTORING PLAN/ (13+ files)
 │   ├── README.md ⭐⭐
 │   │   └── Refactoring program hub
 │   ├── shopify-like-storefront-master-plan.md ⭐⭐
 │   │   └── North star execution plan
-│   ├── storefront-commerce-consolidation-execution-plan.md ⭐⭐
-│   │   └── 12-phase consolidation program
-│   ├── storefront-runtime-integration-execution-plan.md ⭐⭐
-│   │   └── 18-week integration plan
-│   ├── PLAN-SUMMARY.md ⭐
-│   │   └── Plain-language summary
+│   ├── PLAN-SUMMARY.md ⭐⭐⭐
+│   │   └── Plain-language summary of what is actually built (now the authoritative doc — the two multi-phase execution plans that used to sit above it were removed for encoding mandatory rollout/kill-switch complexity that doesn't apply to a pre-launch product)
 │   ├── wave1-canonical-route-recovery.md
 │   ├── storefront-phase-1-execution-backlog.md
 │   ├── storefront-runtime-phase-2-3-implementation-stories.md
 │   ├── storefront-runtime-phase-6-certification.md
-│   ├── storefront-runtime-phase-7-rollout.md
-│   ├── storefront-runtime-phase-7-deployment-package.md
-│   ├── storefront-runtime-phase-7-monitoring-log.md
-│   ├── storefront-runtime-phase-7-pilot-report.md
-│   ├── storefront-runtime-phase-7-evidence.md
-│   ├── storefront-runtime-phase-8-legacy-retirement.md
-│   ├── storefront-runtime-phase-8-decommission-backlog.md
-│   ├── storefront-runtime-phase-8-support-handover.md
-│   ├── storefront-runtime-phase-8-operating-guide.md
 │   ├── storefront-certification-report.md
 │   ├── audits/
 │   │   └── storefront-commerce-consolidation-audit.md

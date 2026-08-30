@@ -138,7 +138,6 @@ justshop-frontend/
 | `docs/configuration/environment-variables.md` | Complete env catalog, scope, usage, defaults, and validation rules. |
 | `docs/configuration/modules.md` | Why each Nuxt module exists and how it integrates with the app. |
 | `docs/configuration/plugins.md` | Plugin lifecycle, ordering, client/server suffix rules, current plugin responsibilities. |
-| `docs/configuration/feature-flags.md` | Controlled rollout strategy and future flag governance. |
 | `docs/development/coding-standards.md` | Naming, formatting, comments, dependency introduction, and review standards. |
 | `docs/development/components.md` | Component layer patterns and ownership boundaries. |
 | `docs/development/composables.md` | Composable naming, side-effect rules, and shared logic patterns. |

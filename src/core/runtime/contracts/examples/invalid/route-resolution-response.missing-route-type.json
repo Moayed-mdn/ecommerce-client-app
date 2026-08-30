@@ -17,14 +17,15 @@
     "locale": "en",
     "layout": "marketing",
     "redirectTo": null,
-    "redirectStatus": null,
-    "legacyPassthrough": false
+    "redirectStatus": null
   },
   "cache": {
     "key": "storefront_runtime:2026-05-28:tenant:justshop-demo:locale:en:artifact:route:path:/about-us",
     "artifact": "route",
     "ttlSeconds": 300,
-    "tags": ["tenant:justshop-demo"],
+    "tags": [
+      "tenant:justshop-demo"
+    ],
     "bypassed": false
   }
 }

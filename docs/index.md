@@ -26,7 +26,6 @@ It links the current owner documents, records what has already been created, and
 | `docs/configuration/environment-variables.md` | Authoritative env variable catalog |
 | `docs/configuration/modules.md` | Active Nuxt module inventory |
 | `docs/configuration/plugins.md` | Plugin inventory, order, and runtime mode notes |
-| `docs/configuration/feature-flags.md` | Feature flag governance and current no-flags status |
 | `docs/architecture/overview.md` | Top-level runtime layer overview |
 | `docs/architecture/rendering-strategy.md` | SSR, client-only, and hydration boundaries |
 | `docs/architecture/routing-and-navigation.md` | Route families, middleware, and locale routing |
@@ -41,21 +40,10 @@ It links the current owner documents, records what has already been created, and
 | `docs/architecture/storefront-runtime-dto-mapping-specification-v1.md` | DTO normalization rules between Laravel and Nuxt |
 | `docs/refactoring-plan/README.md` | Navigation hub for the storefront refactoring programs (Runtime Integration & Commerce Consolidation) |
 | `docs/refactoring-plan/shopify-like-storefront-master-plan.md` | Short execution-facing north star for turning the storefront into a Shopify-like unified commerce experience |
-| `docs/refactoring-plan/storefront-commerce-consolidation-execution-plan.md` | Authoritative 12-phase program for unifying routing, shell, auth, and cart into a coherent commerce storefront |
 | `docs/refactoring-plan/wave1-canonical-route-recovery.md` | Historical Wave 1 route-recovery note, now superseded by the live `/shop/**` storefront alignment |
-| `docs/refactoring-plan/PLAN-SUMMARY.md` | Plain-language storefront runtime plan summary for sharing (phases, status, architecture, local demo) |
-| `docs/refactoring-plan/storefront-runtime-integration-execution-plan.md` | Authoritative 18-week storefront runtime integration execution plan |
+| `docs/refactoring-plan/PLAN-SUMMARY.md` | Authoritative plain-language storefront runtime plan summary (phases, status, architecture, local demo) — the two multi-phase execution plans that used to sit above it were removed for encoding mandatory rollout/kill-switch complexity that doesn't apply to a pre-launch product |
 | `docs/refactoring-plan/storefront-runtime-phase-2-3-implementation-stories.md` | Phase 2 and Phase 3 implementation stories derived from the frozen runtime contracts |
-| `docs/refactoring-plan/storefront-runtime-phase-6-certification.md` | Repo-backed certification evidence and environment-owned gaps before rollout |
-| `docs/refactoring-plan/storefront-runtime-phase-7-rollout.md` | Controlled rollout checklist, completion boundary, and Phase 7 closeout requirements |
-| `docs/refactoring-plan/storefront-runtime-phase-7-deployment-package.md` | Operator deployment package for internal, pilot, and full rollout steps |
-| `docs/refactoring-plan/storefront-runtime-phase-7-monitoring-log.md` | Operator monitoring evidence log for internal, pilot, and full rollout |
-| `docs/refactoring-plan/storefront-runtime-phase-7-pilot-report.md` | Pilot merchant validation and sign-off template |
-| `docs/refactoring-plan/storefront-runtime-phase-7-evidence.md` | Local rollout verification evidence for the repo-backed Phase 7 controls |
-| `docs/refactoring-plan/storefront-runtime-phase-8-legacy-retirement.md` | Phase 8 legacy keep/retire log, deferred Phase 7 note, and program closeout |
-| `docs/refactoring-plan/storefront-runtime-phase-8-decommission-backlog.md` | Future runtime retirements (search, checkout, auth migration) |
-| `docs/refactoring-plan/storefront-runtime-phase-8-support-handover.md` | Support and on-call handover for steady-state runtime operations |
-| `docs/refactoring-plan/storefront-runtime-phase-8-operating-guide.md` | Steady-state operating guide after Phase 8 closeout |
+| `docs/refactoring-plan/storefront-runtime-phase-6-certification.md` | Repo-backed certification evidence and environment-owned gaps |
 | `docs/refactoring-plan/audits/storefront-commerce-consolidation-audit.md` | Current-state storefront audit that explains the runtime consolidation and shell/routing gaps |
 | `docs/refactoring-plan/storefront-phase-1-execution-backlog.md` | Phase 1 engineering backlog: route audit, shell unification, navigation hardening with ordered waves and acceptance criteria |
 | `docs/refactoring-plan/storefront-certification-report.md` | Phase 9 closeout: legacy retirement log, gap review, and storefront certification |

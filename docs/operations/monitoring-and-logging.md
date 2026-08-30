@@ -21,7 +21,7 @@ Current examples include:
 
 - `server/middleware/log.ts` logging request URLs
 - `src/core/runtime/observability/logRuntimeEvent.ts` emitting structured runtime event records with tenant, locale, path, request id, artifact, and status fields
-- `server/middleware/01.tenant.ts` resolving the tenant, computing the rollout flag, and rejecting non-legacy storefront paths when the runtime is disabled for that tenant
+- `server/middleware/01.tenant.ts` resolving the tenant and rejecting requests for a hostname that doesn't map to any tenant
 - `console.error(...)` calls in search, product detail, verification, Google auth, and share flows
 - `console.warn(...)` in guest-cart merge behavior
 
@@ -61,24 +61,6 @@ The storefront runtime migration now defines the required future logging contrac
 - `docs/operations/storefront-runtime-logging-specification-v1.md`
 
 That specification is the Phase 1 contract target for the Laravel runtime APIs. This owner document still describes the current live repo observability reality and should not be read as claiming the future logging schema is already implemented.
-
-## Phase 7 Monitoring Evidence
-
-Controlled rollout evidence for the storefront runtime is tracked separately in:
-
-- `docs/refactoring-plan/storefront-runtime-phase-7-monitoring-log.md`
-- `docs/refactoring-plan/storefront-runtime-phase-7-evidence.md`
-
-Those files capture the Phase 7 operator record for:
-
-- runtime error rate
-- `runtime.rollout_disabled` response count
-- catch-all `404` rate for CMS storefront paths
-- SSR and runtime API latency
-- legacy route availability
-- SEO spot checks on sampled pages
-
-They do not replace platform dashboards or alerting. They are the repo-backed evidence templates for operators to fill during staging and production rollout.
 
 ## Evidence To Capture During Incidents
 

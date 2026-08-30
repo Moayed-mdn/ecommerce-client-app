@@ -73,7 +73,7 @@ export const useStorefrontPayload = () => {
     : null
 
   const fetchPayload = async (resolved: RuntimeResolvedRoute): Promise<StorefrontRuntimeBundle | null> => {
-    if (resolved.status !== 'matched' || resolved.pageId === null || resolved.legacyPassthrough) {
+    if (resolved.status !== 'matched' || resolved.pageId === null) {
       return null
     }
 

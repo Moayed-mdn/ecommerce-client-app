@@ -18,14 +18,18 @@
     "locale": "ar",
     "layout": null,
     "redirectTo": null,
-    "redirectStatus": null,
-    "legacyPassthrough": false
+    "redirectStatus": null
   },
   "cache": {
     "key": "storefront_runtime:2026-05-28:tenant:justshop-demo:locale:ar:artifact:route:path:/missing-page",
     "artifact": "route",
     "ttlSeconds": 60,
-    "tags": ["tenant:justshop-demo", "locale:ar", "artifact:route", "path:/missing-page"],
+    "tags": [
+      "tenant:justshop-demo",
+      "locale:ar",
+      "artifact:route",
+      "path:/missing-page"
+    ],
     "bypassed": false
   }
 }

@@ -22,7 +22,6 @@ export type RuntimeErrorCode =
   | 'runtime.preview_invalid'
   | 'runtime.preview_expired'
   | 'runtime.validation_failed'
-  | 'runtime.rollout_disabled'
   | 'runtime.internal_error'
 
 export interface RuntimeRequestHeaders {
@@ -96,7 +95,6 @@ export interface RuntimeRouteMatch {
   path: string
   locale: StorefrontRuntimeLocale
   layout: RuntimeLayout | null
-  legacyPassthrough: boolean
 }
 
 export interface RuntimeRouteResolutionResponse {

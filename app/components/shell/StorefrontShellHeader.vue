@@ -96,7 +96,7 @@ interface ThemeHeaderSection {
 const themeHeaderSection = inject<Ref<ThemeHeaderSection | null> | ThemeHeaderSection | null>('themeHeaderSection', null)
 
 const logoSettings = computed(() => {
-  // Priority: SystemSectionRenderer prop (with blocks) > ThemeTemplate inject > empty
+  // Priority: headerSection prop (with blocks) > ThemeTemplate inject > empty
   const source = props.headerSection?.blocks?.length
     ? props.headerSection
     : (isRef(themeHeaderSection) ? themeHeaderSection.value : themeHeaderSection)

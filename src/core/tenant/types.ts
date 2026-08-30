@@ -20,7 +20,6 @@ export interface StorefrontContext {
   preview: boolean
   previewToken?: string | null
   route: string
-  featureFlags: Record<string, boolean>
   requestId: string
   navigation: RuntimeNavigationResponse['data'] | null
   themePayload: RuntimeThemeResponse['data'] | null

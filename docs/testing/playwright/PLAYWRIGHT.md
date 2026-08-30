@@ -799,10 +799,6 @@ STRIPE_TEST_SECRET_KEY=sk_test_...
 
 # Tenant ID for multi-tenant tests (actual header usage)
 TEST_TENANT_ID=demo
-
-# Runtime rollout mode (actual feature flag system)
-STOREFRONT_RUNTIME_ROLLOUT_MODE=full
-STOREFRONT_RUNTIME_KILL_SWITCH=false
 ```
 
 ### Loading in Playwright Config

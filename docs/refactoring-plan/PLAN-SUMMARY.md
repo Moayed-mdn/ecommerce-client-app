@@ -4,13 +4,13 @@ This document is a plain-language overview of the **Storefront Runtime Integrati
 
 **Repositories:** `justshop-frontend` (Nuxt) + `laratenant-backend` (Laravel)  
 **Original plan length:** 18 weeks, 9 phases (0–8)  
-**Authoritative technical doc:** [storefront-runtime-integration-execution-plan.md](./storefront-runtime-integration-execution-plan.md)
+**Authoritative technical doc:** this file (the multi-phase execution plan this used to point to was removed — see §5 note below)
 
 ---
 
 ## 1. What problem this solves
 
-Before this work, the public storefront behaved partly like a normal Nuxt app (hardcoded pages, components fetching their own data) and partly like a future “platform” (catch-all route, mocks). That made it hard to:
+Before this work, the public storefront behaved partly like a normal Nuxt app (hardcoded pages, components fetching their own data) and partly like a future "platform" (catch-all route, mocks). That made it hard to:
 
 - Run **many merchant stores** on one codebase
 - Serve **CMS-driven pages** from Laravel
@@ -59,10 +59,10 @@ Catalog and marketing traffic use the **new catch-all runtime**.
 | **4** | 10–11 | Section/layout hardening: presentational sections, safe fallbacks | **Done** |
 | **5** | 12–13 | Preview mode + tenant-safe cache invalidation | **Done** |
 | **6** | 14–15 | Certification: SEO, isolation, performance baselines, observability | **Done** (automated in repo; production dashboards optional) |
-| **7** | 16–17 | Controlled production rollout (internal → pilot → full, kill switch) | **Deferred** (controls built; formal pilot/monitoring not run) |
+| **7** | 16–17 | ~~Controlled production rollout (internal → pilot → full, kill switch)~~ | **Removed** — this project has never shipped to production, so there was nothing to gate. Runtime is unconditional for every tenant now; see below. |
 | **8** | 18 | Legacy retirement log + handover docs + safe code cleanup | **Done** (repo closeout) |
 
-**Program milestones M1–M6 and M8:** met in the repository. **M7** (production rollout completed) was **not** claimed; rollout tooling remains for ops if needed.
+**Program milestones M1–M6 and M8:** met in the repository. **M7** (production rollout) does not apply — the rollout/kill-switch/pilot-tenant machinery was removed from the codebase rather than executed, since there is no production traffic for it to gate.
 
 ---
 
@@ -97,15 +97,15 @@ Preview bypasses shared cache; publishing invalidates tenant-scoped runtime cach
 
 ### Phase 6 — Certification
 
-Backend tests + `npm run runtime:verify:phase6` (SSR smoke on home, marketing, category, product).
+Backend tests + `npm run runtime:smoke` (SSR smoke on home, marketing, category, product).
 
-### Phase 7 — Rollout (optional ops)
+### Phase 7 — Rollout (removed)
 
-Env flags: `STOREFRONT_RUNTIME_ROLLOUT_MODE`, `STOREFRONT_RUNTIME_KILL_SWITCH`, tenant allowlists. Verification: `npm run runtime:verify:phase7`. Formal 48h monitoring, pilot UAT, and 7-day stability were **deferred** by team choice.
+This phase built a cohort-gating system (rollout mode, kill switch, internal/pilot tenant allowlists) for a controlled production rollout. It was removed from the codebase: this project has never shipped to production, so there was no live traffic for a rollout gate to protect, and the gate only added a config surface a reader had to reason about. Runtime now applies unconditionally to every resolved tenant.
 
 ### Phase 8 — Closeout
 
-Documented what to keep vs retire; removed unused migration composables; handover + operating guides. See [storefront-runtime-phase-8-legacy-retirement.md](./storefront-runtime-phase-8-legacy-retirement.md).
+Documented what to keep vs retire; removed unused migration composables; handover + operating guides.
 
 ---
 
@@ -174,24 +174,22 @@ php artisan test tests/Feature/Storefront/StorefrontRuntimeTest.php
 cd justshop-frontend
 npm run runtime:contracts:check
 npm run build
-npm run runtime:verify:phase6   # needs built server + backend running
-npm run runtime:verify:phase7   # rollout / kill-switch smoke
+npm run runtime:smoke   # needs built server + backend running
 ```
 
 ---
 
 ## 10. What is intentionally still future work
 
-| Item | Why not “done” |
+| Item | Why not "done" |
 |------|----------------|
-| Migrate cart/checkout/auth to runtime | High risk; kept on legacy routes |
+| Migrate cart/checkout/auth to runtime | High risk; kept on fixed system routes |
 | Migrate search to runtime | Separate GraphQL flow today |
 | Per-merchant theme in database | Config-based theme for now |
-| Formal production rollout (Phase 7 ops) | Deferred; tooling exists |
 | Merchant-uploaded product images | Demo uses external placeholder images |
 | Production load tests and dashboards | Ops/environment owned |
 
-Tracked in: [storefront-runtime-phase-8-decommission-backlog.md](./storefront-runtime-phase-8-decommission-backlog.md)
+Future retirements were tracked in a Phase 8 decommission backlog doc that has since been removed along with the rest of the rollout-era planning docs; re-create a tracking doc here if this list grows.
 
 ---
 
@@ -199,15 +197,15 @@ Tracked in: [storefront-runtime-phase-8-decommission-backlog.md](./storefront-ru
 
 | Topic | Document |
 |--------|----------|
-| Full execution plan | [storefront-runtime-integration-execution-plan.md](./storefront-runtime-integration-execution-plan.md) |
+| Full execution plan | Removed (`2026-08-29`) — encoded mandatory rollout/kill-switch complexity for a project that has never shipped to production. This file is now authoritative. |
 | Contract hub | [../architecture/storefront-runtime-contracts.md](../architecture/storefront-runtime-contracts.md) |
-| Phase 7 rollout | [storefront-runtime-phase-7-rollout.md](./storefront-runtime-phase-7-rollout.md) |
-| Phase 8 closeout | [storefront-runtime-phase-8-legacy-retirement.md](./storefront-runtime-phase-8-legacy-retirement.md) |
-| Operating guide | [storefront-runtime-phase-8-operating-guide.md](./storefront-runtime-phase-8-operating-guide.md) |
-| Support handover | [storefront-runtime-phase-8-support-handover.md](./storefront-runtime-phase-8-support-handover.md) |
+| System routes vs runtime routes | [../architecture/storefront-migration-strategy.md](../architecture/storefront-migration-strategy.md) |
+| Certification evidence | [storefront-runtime-phase-6-certification.md](./storefront-runtime-phase-6-certification.md) |
+
+The Phase 7 rollout and Phase 8 closeout/operating-guide/support-handover docs referenced here previously have been removed — they described a controlled production rollout program that never ran, for a project that has never shipped to production.
 
 ---
 
 ## 12. One-sentence summary
 
-We turned the JustShop storefront into a **multi-tenant, Laravel-driven, Nuxt-rendered runtime**: contracts first, real APIs, SSR catalog/CMS pages, safe preview/cache, tests and rollout flags in the repo; checkout/login stay on legacy pages for now; the **engineering plan is complete in code**, while **formal production pilot rollout** was optional and deferred.
+We turned the JustShop storefront into a **multi-tenant, Laravel-driven, Nuxt-rendered runtime**: contracts first, real APIs, SSR catalog/CMS pages, safe preview/cache, and tests in the repo; checkout/login stay on fixed system routes for now; the **engineering plan is complete in code**. The rollout/kill-switch/pilot-tenant gating built for a controlled production launch was removed — this project has never shipped to production, so runtime now applies unconditionally to every tenant rather than being gated behind a cohort flag.

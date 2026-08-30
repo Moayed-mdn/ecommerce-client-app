@@ -144,7 +144,7 @@ const variant = computed<'store_not_found' | 'store_inactive' | 'not_found' | 'g
   const status = props.error?.statusCode
 
   if (code === 'runtime.tenant_not_found') return 'store_not_found'
-  if (code === 'runtime.tenant_inactive' || code === 'runtime.rollout_disabled') return 'store_inactive'
+  if (code === 'runtime.tenant_inactive') return 'store_inactive'
   if (status === 404) return 'not_found'
   return 'generic'
 })

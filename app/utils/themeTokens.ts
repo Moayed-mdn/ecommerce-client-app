@@ -24,8 +24,6 @@ const DEFAULT_THEME_VALUES = {
     warning: '#f59e0b',
   },
   typography: {
-    heading: 'Inter, system-ui, sans-serif',
-    body: 'Inter, system-ui, sans-serif',
     'heading-weight': '600',
     'body-weight': '400',
     'font-size-base': '16px',
@@ -60,17 +58,27 @@ export const extractThemeTokens = (theme: Theme | null): ThemeTokens => {
   const runtimeTokens = runtime.tokens as Record<string, string> | undefined;
 
   if (runtimeTokens) {
-    tokens['--color-primary'] = runtimeTokens.colorPrimary;
-    tokens['--color-secondary'] = runtimeTokens.colorSecondary;
-    tokens['--color-background'] = runtimeTokens.colorSurface ?? runtimeTokens.colorBackground;
-    tokens['--color-text'] = runtimeTokens.colorText;
-    tokens['--color-text-muted'] = runtimeTokens.colorTextMuted;
-    tokens['--color-border'] = runtimeTokens.colorBorder;
-    tokens['--color-success'] = runtimeTokens.colorSuccess;
-    tokens['--color-error'] = runtimeTokens.colorError;
-    tokens['--color-warning'] = runtimeTokens.colorWarning;
-    tokens['--runtime-font-body'] = runtimeTokens.fontBody ?? '';
-    tokens['--runtime-font-heading'] = runtimeTokens.fontHeading ?? '';
+    tokens['--color-primary'] = runtimeTokens.colorPrimary ?? '';
+    tokens['--color-secondary'] = runtimeTokens.colorSecondary ?? '';
+    tokens['--color-background'] =
+      runtimeTokens.colorSurface ??
+      runtimeTokens.colorBackground ??
+      '';
+    tokens['--color-text'] = runtimeTokens.colorText ?? '';
+    tokens['--color-text-muted'] = runtimeTokens.colorTextMuted ?? '';
+    tokens['--color-border'] = runtimeTokens.colorBorder ?? '';
+    tokens['--color-success'] = runtimeTokens.colorSuccess ?? '';
+    tokens['--color-error'] = runtimeTokens.colorError ?? '';
+    tokens['--color-warning'] = runtimeTokens.colorWarning ?? '';
+
+    // Runtime API is the source of truth for fonts.
+    if (runtimeTokens.fontBody) {
+      tokens['--font-body'] = runtimeTokens.fontBody;
+    }
+
+    if (runtimeTokens.fontHeading) {
+      tokens['--font-heading'] = runtimeTokens.fontHeading;
+    }
   }
 
   // Handle legacy format: theme.settings.colors.primary
@@ -158,10 +166,8 @@ export const extractThemeTokens = (theme: Theme | null): ThemeTokens => {
   
   Object.entries(defaultTokens).forEach(([key, value]) => {
     // Normalize --colors-* to --color-* to match API format
-    const normalizedKey = key.startsWith('--colors-') 
+    const normalizedKey = key.startsWith('--colors-')
       ? key.replace('--colors-', '--color-')
-      : key.startsWith('--typography-')
-      ? key.replace('--typography-', '--font-')
       : key;
     
     // Only add if not already present
@@ -365,32 +371,61 @@ function kebabCase(str: string): string {
 }
 
 /**
- * Extract Google Fonts from theme typography settings
+ * Extract Google Fonts from theme typography settings.
+ * Reads font families from the current runtime API (`tokens.fontBody` /
+ * `tokens.fontHeading`) as well as legacy theme formats.
  */
 export const extractGoogleFonts = (theme: Theme | null): string[] => {
-  if (!theme?.settings?.typography) {
-    return [];
-  }
+  if (!theme) return [];
 
   const fonts = new Set<string>();
-  const typography = theme.settings.typography;
-
-  // Common font keys
-  const fontKeys = ['heading', 'body', 'display', 'mono'];
-
-  fontKeys.forEach((key) => {
-    const font = typography[key];
-    if (font && typeof font === 'string') {
-      // Extract the font family name (before any commas)
-      const fontFamily = font.split(',')[0].trim().replace(/['"]/g, '');
-      
-      // Skip system fonts
+  
+  // Handle runtime API format: theme.tokens.fontBody, theme.tokens.fontHeading
+  const runtime = theme as unknown as Record<string, unknown>;
+  const runtimeTokens = runtime.tokens as Record<string, string> | undefined;
+  
+  if (runtimeTokens) {
+    const fontBody = runtimeTokens.fontBody;
+    const fontHeading = runtimeTokens.fontHeading;
+    
+    if (fontBody && typeof fontBody === 'string') {
+      const fontFamily = fontBody.split(',')[0]?.trim().replace(/['"]/g, '') ?? '';
       const systemFonts = ['system-ui', 'sans-serif', 'serif', 'monospace', 'cursive', 'fantasy'];
-      if (!systemFonts.includes(fontFamily.toLowerCase())) {
+      if (fontFamily && !systemFonts.includes(fontFamily.toLowerCase())) {
         fonts.add(fontFamily);
       }
     }
-  });
+    
+    if (fontHeading && typeof fontHeading === 'string') {
+      const fontFamily = fontHeading.split(',')[0]?.trim().replace(/['"]/g, '') ?? '';
+      const systemFonts = ['system-ui', 'sans-serif', 'serif', 'monospace', 'cursive', 'fantasy'];
+      if (fontFamily && !systemFonts.includes(fontFamily.toLowerCase())) {
+        fonts.add(fontFamily);
+      }
+    }
+  }
+
+  // Handle legacy format: theme.settings.typography
+  if (theme.settings?.typography) {
+    const typography = theme.settings.typography;
+
+    // Common font keys
+    const fontKeys = ['heading', 'body', 'headingFont', 'bodyFont', 'display', 'mono'];
+
+    fontKeys.forEach((key) => {
+      const font = typography[key];
+      if (font && typeof font === 'string') {
+        // Extract the font family name (before any commas)
+        const fontFamily = font.split(',')[0]?.trim().replace(/['"]/g, '') ?? '';
+        
+        // Skip system fonts
+        const systemFonts = ['system-ui', 'sans-serif', 'serif', 'monospace', 'cursive', 'fantasy'];
+        if (fontFamily && !systemFonts.includes(fontFamily.toLowerCase())) {
+          fonts.add(fontFamily);
+        }
+      }
+    });
+  }
 
   return Array.from(fonts);
 };
